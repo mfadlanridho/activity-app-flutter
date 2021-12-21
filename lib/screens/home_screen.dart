@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -62,38 +64,45 @@ class MyDashboard extends StatelessWidget {
             'My Dashboard',
             style: TextStyle(fontSize: 30),
           ),
+          // TODO: change to gridview
           Row(
             children: [
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    MyDashboardCard(
+                    ImageCard(
                       label: 'Completed',
                       count: 86,
+                      image: Image.asset(
+                        'images/iMac.png',
+                        scale: 2,
+                      ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MyDashboardCard(
+                    IconCard(
                       label: 'Completed',
                       count: 86,
+                      icon: Icon(Icons.cancel_rounded),
                     ),
                   ],
                 ),
               ),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    MyDashboardCard(
-                      label: 'Completed',
+                    IconCard(
+                      label: 'Pending',
                       count: 86,
+                      icon: Icon(Icons.av_timer_rounded),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    MyDashboardCard(
-                      label: 'Completed',
-                      count: 86,
+                    ImageCard(
+                      label: 'On',
+                      count: 67,
+                      image: Image.asset(
+                        'images/calendar.png',
+                        scale: 2,
+                      ),
                     ),
                   ],
                 ),
@@ -106,22 +115,64 @@ class MyDashboard extends StatelessWidget {
   }
 }
 
-class MyDashboardCard extends StatelessWidget {
+class ImageCard extends StatelessWidget {
+  final Image image;
   final String label;
   final int count;
 
-  const MyDashboardCard({Key? key, required this.label, required this.count}) : super(key: key);
+  const ImageCard({Key? key, required this.label, required this.count, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(
+        bottom: 8,
+        right: 8,
+      ),
+      padding: EdgeInsets.all(20),
       color: Colors.lightBlueAccent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            'images/iMac.png',
+          image,
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 25,
+            ),
           ),
+          Text(
+            count.toString(),
+            style: TextStyle(
+              fontSize: 25,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class IconCard extends StatelessWidget {
+  final Icon icon;
+  final String label;
+  final int count;
+
+  const IconCard({Key? key, required this.label, required this.count, required this.icon}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: 8,
+        right: 8,
+      ),
+      padding: EdgeInsets.all(20),
+      color: Colors.lightBlueAccent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          icon,
           Text(
             label,
             style: TextStyle(

@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           WelcomeCard(),
           MyDashboard(),
+          Today(),
         ],
       ),
     );
@@ -26,8 +27,7 @@ class WelcomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
+    return Padding(
       padding: EdgeInsets.all(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,12 +37,34 @@ class WelcomeCard extends StatelessWidget {
             children: [
               Text(
                 'Hi, Steven',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(
+                  fontSize: 35,
+                ),
               ),
-              Text('Let\'s make this day productive'),
+              SizedBox(
+                height: 7,
+              ),
+              Text(
+                'Let\'s make this day productive',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.blueGrey[900],
+                ),
+              ),
             ],
           ),
-          CircleAvatar()
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(blurRadius: 10, color: Colors.grey.shade300, spreadRadius: 1)],
+            ),
+            child: CircleAvatar(
+              radius: 25.0,
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage('images/avatar.png'),
+            ),
+          ),
         ],
       ),
     );
@@ -54,35 +76,38 @@ class MyDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: EdgeInsets.all(20),
-      color: Colors.blue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'My Dashboard',
-            style: TextStyle(fontSize: 30),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'My Dashboard',
+              style: TextStyle(fontSize: 30),
+            ),
           ),
-          // TODO: change to gridview
           Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ImageCard(
+                    DashboardCard(
                       label: 'Completed',
                       count: 86,
                       image: Image.asset(
                         'images/iMac.png',
                         scale: 2,
                       ),
+                      color: Colors.lightBlue[200],
                     ),
-                    IconCard(
-                      label: 'Completed',
+                    DashboardCard(
+                      label: 'Cancelled',
                       count: 86,
                       icon: Icon(Icons.cancel_rounded),
+                      color: Colors.red[300],
                     ),
                   ],
                 ),
@@ -91,18 +116,20 @@ class MyDashboard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    IconCard(
+                    DashboardCard(
                       label: 'Pending',
                       count: 86,
                       icon: Icon(Icons.av_timer_rounded),
+                      color: Colors.deepPurple[300],
                     ),
-                    ImageCard(
+                    DashboardCard(
                       label: 'On',
                       count: 67,
                       image: Image.asset(
                         'images/calendar.png',
                         scale: 2,
                       ),
+                      color: Colors.green[200],
                     ),
                   ],
                 ),
@@ -115,13 +142,15 @@ class MyDashboard extends StatelessWidget {
   }
 }
 
-class ImageCard extends StatelessWidget {
-  final Image image;
+class DashboardCard extends StatelessWidget {
   final String label;
   final int count;
+  final Image? image;
+  final Icon? icon;
+  final Color? color;
 
-  const ImageCard({Key? key, required this.label, required this.count, required this.image}) : super(key: key);
-
+  const DashboardCard({Key? key, required this.label, required this.count, this.image, this.icon, this.color}) : super(key: key);
+  // TODO: change to elevated button
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -130,11 +159,24 @@ class ImageCard extends StatelessWidget {
         right: 8,
       ),
       padding: EdgeInsets.all(20),
-      color: Colors.lightBlueAccent,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+        color: color ?? Colors.lightBlueAccent,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          image,
+          if (image != null) image! else if (icon != null) icon!,
           Text(
             label,
             style: TextStyle(
@@ -153,40 +195,139 @@ class ImageCard extends StatelessWidget {
   }
 }
 
-class IconCard extends StatelessWidget {
-  final Icon icon;
-  final String label;
-  final int count;
-
-  const IconCard({Key? key, required this.label, required this.count, required this.icon}) : super(key: key);
+class Today extends StatelessWidget {
+  const Today({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        bottom: 8,
-        right: 8,
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Today',
+              style: TextStyle(fontSize: 30),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return TodayCard();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      padding: EdgeInsets.all(20),
-      color: Colors.lightBlueAccent,
-      child: Column(
+    );
+  }
+}
+
+class TodayCard extends StatelessWidget {
+  const TodayCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.ac_unit),
+      title: Text(
+        'Cleaning Clothes',
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
+      subtitle: Text('07:00 - 07:15'),
+      trailing: Icon(Icons.more_vert),
+    );
+  }
+}
+
+// --------------------
+class CustomListItem extends StatelessWidget {
+  const CustomListItem({
+    Key? key,
+    required this.title,
+    required this.user,
+    required this.viewCount,
+  }) : super(key: key);
+
+  final String title;
+  final String user;
+  final int viewCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          icon,
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 25,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.blue),
             ),
           ),
-          Text(
-            count.toString(),
-            style: TextStyle(
-              fontSize: 25,
-            ),
+          _VideoDescription(),
+          const Icon(
+            Icons.more_vert,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _VideoDescription extends StatelessWidget {
+  const _VideoDescription({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Cleaning Clothes',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 17.0,
+            ),
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
+          Text(
+            '07:00 - 07:15',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyStatelessWidget extends StatelessWidget {
+  const MyStatelessWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(8.0),
+      children: <CustomListItem>[
+        CustomListItem(
+          user: 'Flutter',
+          viewCount: 999000,
+          title: 'The Flutter YouTube Channel',
+        ),
+        CustomListItem(
+          user: 'Dash',
+          viewCount: 884000,
+          title: 'Announcing Flutter 1.0',
+        ),
+      ],
     );
   }
 }

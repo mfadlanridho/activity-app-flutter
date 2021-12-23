@@ -14,6 +14,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Home Screen',
       home: MyStatefulWidget(),
+      theme: ThemeData(
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: Color(0xFF12175E),
+              displayColor: Color(0xFF12175E),
+            ),
+      ),
     );
   }
 }

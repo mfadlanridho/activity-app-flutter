@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:task_app/widgets/basic_calendar.dart';
 import 'package:task_app/utils.dart';
-import 'package:task_app/widgets/heading_text.dart';
-
+import 'package:task_app/widgets/horizontal_task_list.dart';
+import 'package:task_app/widgets/nested_listview_example.dart';
 import '../widgets/task_card.dart';
 
 class TasksScreen extends StatelessWidget {
@@ -17,34 +16,22 @@ class TasksScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeadingText('Tasks'),
+            const Text(
+              'Tasks',
+              style: kHeadingTextStyle,
+            ),
             TableBasicsExample(),
-            ListTile(
-              leading: Text(
-                'Today',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              trailing: Text(
-                '09 h 45 min',
-              ),
+            const SizedBox(height: kSpaceBetweenWidgets),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Today', style: TextStyle(fontSize: 25)),
+                Text('09 h 45 min'),
+              ],
             ),
             Expanded(
-              child: Row(
-                children: [
-                  Text('07 : 00'),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 2,
-                      itemBuilder: (context, index) {
-                        return TaskCard();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+              child: NestedListViewExample(),
+            )
           ],
         ),
       ),

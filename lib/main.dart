@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_app/screens/home_screen.dart';
 import 'package:task_app/screens/tasks_screen.dart';
+import 'package:task_app/widgets/nested_listview_example.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,30 +14,30 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Home Screen',
-      home: MyStatefulWidget(),
+      home: const NavigationScreen(),
       theme: ThemeData(
         textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: Color(0xFF12175E),
-              displayColor: Color(0xFF12175E),
+              bodyColor: const Color(0xFF12175E),
+              displayColor: const Color(0xFF12175E),
             ),
       ),
     );
   }
 }
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({
+class NavigationScreen extends StatefulWidget {
+  const NavigationScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _NavigationScreenState extends State<NavigationScreen> {
   final _pageOptions = [
-    HomeScreen(),
-    TasksScreen(),
+    const HomeScreen(),
+    const TasksScreen(),
   ];
 
   int _selectedIndex = 0;
@@ -52,7 +53,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      print('ye');
     });
   }
 
